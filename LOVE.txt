@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>戀愛一週年旅行公文｜東京</title>
+<style>
+  :root{
+    --ink:#27323a;
+    --muted:#6d7880;
+    --line:#cfd6da;
+    --paper:#fff;
+    --bg:#eef1f2;
+    --accent:#657d86;
+    --soft:#f5f7f7;
+    --rose:#8b6f73;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Noto Serif TC","Noto Serif CJK TC","PingFang TC","Microsoft JhengHei",serif;
+    line-height:1.85;
+  }
+  .page{
+    width:min(900px, calc(100% - 28px));
+    margin:28px auto 48px;
+    background:var(--paper);
+    box-shadow:0 8px 28px rgba(35,45,50,.08);
+    padding:52px 64px 60px;
+  }
+  .header{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:28px}
+  .agency{font-size:15px;letter-spacing:.16em;color:var(--muted);margin-bottom:4px}
+  h1{font-size:28px;letter-spacing:.20em;margin:0;font-weight:700}
+  .subtitle{margin-top:7px;color:var(--rose);font-size:14px;letter-spacing:.08em}
+  .docno{display:flex;justify-content:space-between;gap:16px;margin-top:12px;font-size:13px;color:var(--muted)}
+  .meta{width:100%;border-collapse:collapse;margin:8px 0 24px;font-size:15px}
+  .meta th,.meta td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+  .meta th{width:82px;font-weight:600;white-space:nowrap}
+  .subject{margin:18px 0 22px;padding:14px 16px;background:var(--soft);border-left:4px solid var(--accent)}
+  .subject strong{letter-spacing:.12em}
+  .section-title{font-weight:700;margin:22px 0 8px;letter-spacing:.08em}
+  .section-title span{color:var(--accent)}
+  .item{margin:6px 0;padding-left:1.95em;text-indent:-1.95em}
+  .item b{font-weight:700}
+  .route{margin:12px 0 18px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .route-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--line)}
+  .route-row:last-child{border-bottom:0}
+  .route-label{background:var(--soft);padding:10px 12px;font-weight:700}
+  .route-detail{padding:10px 14px}
+  .stay{margin:12px 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:6px;background:#fff}
+  .stay-title{font-weight:700;font-size:17px;margin-bottom:4px}
+  .stay small{color:var(--muted)}
+  .note{margin:20px 0;padding:14px 16px;border:1px dashed #b9c2c7;border-radius:6px;color:#46535b;background:#fafbfb}
+  .signature{margin-top:42px;display:grid;grid-template-columns:1fr 220px;gap:30px;align-items:end}
+  .seal{border:1px solid var(--line);padding:14px 16px;color:var(--muted);font-size:13px}
+  .issuer{text-align:center}
+  .issuer .name{font-size:19px;font-weight:700;letter-spacing:.12em}
+  .footer{margin-top:30px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:13px;text-align:center}
+  a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+  .heart{font-family:system-ui,sans-serif}
+  .tag{display:inline-block;padding:1px 7px;border:1px solid #c6d0d4;border-radius:999px;font-size:12px;color:var(--muted);margin-left:5px}
+  @media(max-width:650px){
+    .page{padding:34px 24px 42px;margin-top:12px}
+    h1{font-size:22px;letter-spacing:.14em}
+    .docno{display:block}
+    .route-row{grid-template-columns:92px 1fr}
+    .signature{grid-template-columns:1fr}
+  }
+  @media print{
+    body{background:white}
+    .page{width:100%;margin:0;box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="header">
+    <div class="agency">戀愛關係管理單位</div>
+    <h1>旅　行　公　文</h1>
+    <div class="subtitle">戀愛一週年紀念旅行案</div>
+    <div class="docno">
+      <span>文號：戀週年字第115001號</span>
+      <span>密等：全糖</span>
+    </div>
+  </header>
+
+  <table class="meta" aria-label="公文基本資料">
+    <tr><th>發文者</th><td>老婆</td></tr>
+    <tr><th>受文者</th><td>老公</td></tr>
+    <tr><th>發文日期</th><td>民國 115 年 10 月 5 日</td></tr>
+    <tr><th>速別</th><td>普通件 <span class="tag">但期待值偏高</span></td></tr>
+  </table>
+
+  <div class="subject">
+    <strong>主旨：</strong>
+    為慶祝戀愛滿一歲，擬於民國115年11月15日至19日共同赴東京旅行，請受文者與發文者一起出發、一起放鬆、一起吃好吃的，並共同製造一點值得記住的回憶，請查照。
+  </div>
+
+  <div class="section-title"><span>說明：</span></div>
+
+  <div class="item">一、<b>本案緣由：</b>本日適逢我們戀愛一週年，爰規劃本次東京紀念旅行。平常日子總有工作、雜事與各種待辦事項，這幾天就先暫時放到旁邊，把時間留給我們兩個，慢慢走、慢慢吃，也慢慢聊聊天。</div>
+
+  <div class="item">二、<b>旅行原則：</b>本案不設景點達成率、不考核步數、不追求把東京走完，亦無「今天一定要完成什麼」之要求。景點是建議，不是命令；行程是參考，不是考卷。走累了可以休息，肚子餓了就吃，看到喜歡的地方就進去，臨時想改行程也可以現場協議辦理；若途中剛好聊得很開心，咖啡時間延長亦屬合理展延，不需另案簽呈。</div>
+
+  <div class="item">三、<b>交通資訊：</b>以下為已確認之主要交通安排，實際執行仍以當日狀況及雙方精神狀態為準。</div>
+
+  <div class="route">
+    <div class="route-row">
+      <div class="route-label">🚌 客運</div>
+      <div class="route-detail"><b>1841</b>　松山機場 22:00 出發，車程約 50 分鐘，費用約 112 元。</div>
+    </div>
+    <div class="route-row">
+      <div class="route-label">✈️ 去程</div>
+      <div class="route-detail"><b>PEACH MM620</b><br>11/15（日）02:25　T1 桃園 → 06:30　T1 成田</div>
+    </div>
+    <div class="route-row">
+      <div class="route-label">✈️ 回程</div>
+      <div class="route-detail"><b>PEACH MM627</b><br>11/19（四）22:05　T1 成田 → 01:25　T1 桃園</div>
+    </div>
+  </div>
+
+  <div class="item">四、<b>住宿及位置：</b></div>
+  <div class="stay">
+    <div class="stay-title">上野東金屋ホテル（上野東金屋 Hotel）</div>
+    <div>地址：日本〒110-0015 Tokyo, Taito City, Higashiueno, 3 Chome−17−5 1F</div>
+    <small>住宿位置：<a href="https://maps.app.goo.gl/ypz6ZM2K9GZfupe3A" target="_blank" rel="noopener">Google Maps｜上野東金屋ホテル</a></small>
+  </div>
+
+  <div class="item">五、<b>補充事項：</b>本次旅行之核心目的，並非完成最多景點，而是一起離開日常一下下。行程可以有滿有空，重點不是一直往前走，而是中間也留一點時間給我們。旅途中若有人累了，就休息；若有人想逛，就一起看看；若臨時只想找間咖啡店坐著，也完全符合本案精神。相關細節另請參閱 <a href="https://app.notion.com/p/jp_-_2026-3dd67aca6389805b86e1fb8b658f3129?source=copy_link" target="_blank" rel="noopener">Notion 旅行詳細資訊</a>。</div>
+
+  <div class="note">
+    <b>六、共同期待：</b><br>
+    一起吃喜歡的東西、一起走走看看、一起拍幾張照片，也保留一些什麼都不做、只是在旁邊一起待著的時間。路上可以多聊幾句今天看到的事，也可以突然安靜下來看風景；反正這趟不是來交作業的，是來把「我們」過得好玩一點。希望很多年後回頭看，還能記得：「那一年，我們去東京了。」 <span class="heart">♡</span>
+  </div>
+
+  <div class="section-title"><span>擬辦：</span></div>
+  <div class="item">一、請受文者於民國115年11月15日至19日與發文者共同出席本案。</div>
+  <div class="item">二、旅途中如有想吃、想逛、想睡、想休息、想散步，或只是想找個地方坐著聊聊天之事項，均得隨時提出，雙方協議後辦理，不需另案簽呈。</div>
+  <div class="item">三、如無其他意見，敬請攜帶護照、日用品、一點點期待，以及一顆願意把時間分給彼此的心，一同成行。</div>
+
+  <div class="signature">
+    <div class="seal">
+      本案之「共同出席」係指：一起旅行、一起耍廢、一起吃東西、一起留下回憶。<br>
+      不代表工作義務，亦不產生任何績效壓力。<br><br>
+      <b>附件：</b>東京旅行詳細資訊一份（Notion）<br>
+      <b>備註：</b>本案最重要KPI為兩人都玩得開心；若順便感情升溫，視為超額完成。<br>
+      <span class="heart">♡</span>
+    </div>
+    <div class="issuer">
+      <div class="name">發文者　老婆</div>
+      <div>敬　上</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    本公文有效期限：至兩人玩得開心為止　｜　<span class="heart">♡</span> 戀愛一週年快樂
+  </div>
+</main>
+</body>
+</html>
