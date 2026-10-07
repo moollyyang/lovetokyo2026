@@ -402,7 +402,7 @@
   把下面的 Email 改成「老婆要收到回簽」的信箱。
   第一次送出時，FormSubmit 會寄一封驗證信到這個信箱；點一次驗證連結後即可正式收件。
 */
-const RECEIVER_EMAIL = "YOUR_EMAIL@example.com";
+const RECEIVER_EMAIL = "yanteinyu@gmail.com";
 
 const $ = (id) => document.getElementById(id);
 const pad = $("signaturePad");
@@ -595,7 +595,7 @@ $("resetForm").addEventListener("click", () => {
 });
 
 // 第一次設定時提醒「只需要改一行」。設定好後，提示自動隱藏。
-if(RECEIVER_EMAIL !== "yanteinyu@gmail.com" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(RECEIVER_EMAIL)){
+if(RECEIVER_EMAIL !== "YOUR_EMAIL@example.com" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(RECEIVER_EMAIL)){
   $("configTip").style.display = "none";
 }
 
