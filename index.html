@@ -3,45 +3,253 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#657d86">
 <title>戀愛一週年旅行公文｜東京</title>
 <style>
-  :root{--ink:#27323a;--muted:#6d7880;--line:#cfd6da;--paper:#fff;--bg:#eef1f2;--accent:#657d86;--soft:#f5f7f7;--rose:#8b6f73}
+  :root{
+    --ink:#27323a;
+    --muted:#6d7880;
+    --line:#cfd6da;
+    --paper:#fff;
+    --bg:#eef1f2;
+    --accent:#657d86;
+    --accent-dark:#4f666f;
+    --soft:#f5f7f7;
+    --rose:#8b6f73;
+    --ok:#5f806e;
+    --danger:#8a5f64;
+    --shadow:0 14px 42px rgba(35,45,50,.10);
+    --radius:10px;
+  }
+
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Serif TC","Noto Serif CJK TC","PingFang TC","Microsoft JhengHei",serif;line-height:1.8}
-  .page{width:min(900px,calc(100% - 28px));margin:28px auto 48px;background:var(--paper);box-shadow:0 8px 28px rgba(35,45,50,.08);padding:52px 64px 60px}
-  .header{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:28px}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Noto Serif TC","Noto Serif CJK TC","PingFang TC","Microsoft JhengHei",serif;
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  button,input,textarea{font:inherit}
+  a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+  .heart{font-family:system-ui,sans-serif}
+
+  .page{
+    width:min(920px,calc(100% - 28px));
+    margin:28px auto 56px;
+    background:var(--paper);
+    box-shadow:var(--shadow);
+    padding:52px 64px 60px;
+    border-radius:4px;
+  }
+
+  .header{
+    text-align:center;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:18px;
+    margin-bottom:28px;
+  }
   .agency{font-size:15px;letter-spacing:.16em;color:var(--muted);margin-bottom:4px}
   h1{font-size:28px;letter-spacing:.20em;margin:0;font-weight:700}
   .subtitle{margin-top:7px;color:var(--rose);font-size:14px;letter-spacing:.08em}
   .docno{display:flex;justify-content:space-between;gap:16px;margin-top:12px;font-size:13px;color:var(--muted)}
+  .docno span{display:inline-flex;align-items:center}
+
   .meta{width:100%;border-collapse:collapse;margin:8px 0 24px;font-size:15px}
   .meta th,.meta td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
   .meta th{width:82px;font-weight:600;white-space:nowrap}
-  .subject{margin:18px 0 22px;padding:14px 16px;background:var(--soft);border-left:4px solid var(--accent)}
+
+  .subject{
+    margin:18px 0 22px;
+    padding:14px 16px;
+    background:var(--soft);
+    border-left:4px solid var(--accent);
+    border-radius:0 8px 8px 0;
+  }
   .subject strong{letter-spacing:.12em}
+
   .section-title{font-weight:700;margin:22px 0 8px;letter-spacing:.08em}
   .section-title span{color:var(--accent)}
   .item{margin:6px 0;padding-left:1.95em;text-indent:-1.95em}
   .item b{font-weight:700}
+
   .route{margin:12px 0 18px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
   .route-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--line)}
   .route-row:last-child{border-bottom:0}
   .route-label{background:var(--soft);padding:10px 12px;font-weight:700}
   .route-detail{padding:10px 14px}
+
   .stay{margin:12px 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:6px;background:#fff}
   .stay-title{font-weight:700;font-size:17px;margin-bottom:4px}
   .stay small{color:var(--muted)}
+
   .note{margin:20px 0;padding:14px 16px;border:1px dashed #b9c2c7;border-radius:6px;color:#46535b;background:#fafbfb}
-  .signature{margin-top:38px;display:grid;grid-template-columns:1fr 220px;gap:30px;align-items:end}
+
+  /* 回簽區 */
+  .sign-section{
+    margin-top:38px;
+    padding-top:28px;
+    border-top:2px solid var(--ink);
+  }
+  .sign-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+  .sign-title{font-size:21px;font-weight:700;letter-spacing:.10em}
+  .status-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:5px 11px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:var(--muted);
+    background:#fff;
+    font-size:12px;
+    white-space:nowrap;
+  }
+  .status-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#b4bdc1}
+  .status-badge.done{color:var(--ok);border-color:#b8cabf;background:#f5faf7}
+  .status-badge.done::before{background:var(--ok)}
+
+  .sign-box{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:linear-gradient(180deg,#fff 0%,#fbfcfc 100%);
+    padding:18px;
+  }
+  .sign-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:16px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:13px;font-weight:700;color:#4d5960}
+  .field input,.field textarea{
+    width:100%;
+    border:1px solid #c6ced2;
+    border-radius:7px;
+    padding:10px 12px;
+    background:#fff;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .18s, box-shadow .18s;
+  }
+  .field input:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(101,125,134,.12)}
+  .field textarea{min-height:104px;resize:vertical}
+  .choice-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:2px}
+  .choice{position:relative}
+  .choice input{position:absolute;opacity:0;pointer-events:none}
+  .choice label{
+    display:inline-flex;
+    align-items:center;
+    cursor:pointer;
+    padding:8px 12px;
+    border:1px solid #c6ced2;
+    border-radius:999px;
+    background:#fff;
+    font-size:13px;
+    transition:.18s ease;
+  }
+  .choice input:checked + label{border-color:var(--accent);background:#eef4f5;color:var(--accent-dark);font-weight:700}
+
+  .canvas-wrap{margin-top:16px}
+  .canvas-label{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+  .canvas-label span:first-child{font-size:13px;font-weight:700;color:#4d5960}
+  .clear-btn{
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    font-size:12px;
+    cursor:pointer;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    padding:2px 4px;
+  }
+  .signature-pad{
+    width:100%;
+    height:190px;
+    display:block;
+    border:1px solid #c6ced2;
+    border-radius:7px;
+    background:#fff;
+    touch-action:none;
+    cursor:crosshair;
+  }
+  .canvas-hint{font-size:12px;color:var(--muted);margin-top:5px}
+
+  .confirm-row{
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    margin-top:16px;
+    font-size:13px;
+    color:#46535b;
+  }
+  .confirm-row input{margin-top:5px;accent-color:var(--accent)}
+
+  .sign-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:18px}
+  .btn{
+    appearance:none;
+    border:1px solid #bac4c9;
+    border-radius:8px;
+    padding:10px 16px;
+    cursor:pointer;
+    background:#fff;
+    color:var(--ink);
+    font-size:14px;
+    font-weight:700;
+  }
+  .btn:hover{background:#f7f9f9}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:var(--accent-dark);border-color:var(--accent-dark)}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+
+  .sign-result{
+    display:none;
+    margin-top:16px;
+    padding:14px 16px;
+    border:1px solid #bdd0c4;
+    background:#f6faf7;
+    color:#43584c;
+    border-radius:8px;
+    font-size:14px;
+  }
+  .sign-result.show{display:block}
+  .result-line{margin:2px 0}
+  .result-line b{font-weight:700}
+
+  .legal-note{
+    margin-top:10px;
+    color:var(--muted);
+    font-size:11px;
+    text-align:center;
+  }
+
+  .original-signature{margin-top:34px;display:grid;grid-template-columns:1fr 220px;gap:30px;align-items:end}
   .seal{border:1px solid var(--line);padding:14px 16px;color:var(--muted);font-size:13px}
   .issuer{text-align:center}
   .issuer .name{font-size:19px;font-weight:700;letter-spacing:.12em}
+
   .footer{margin-top:30px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:13px;text-align:center}
-  a{color:inherit;text-decoration:underline;text-underline-offset:3px}
-  .heart{font-family:system-ui,sans-serif}
-  .tag{display:inline-block;padding:1px 7px;border:1px solid #c6d0d4;border-radius:999px;font-size:12px;color:var(--muted);margin-left:5px}
-  @media(max-width:650px){.page{padding:34px 24px 42px;margin-top:12px}h1{font-size:22px;letter-spacing:.14em}.docno{display:block}.route-row{grid-template-columns:92px 1fr}.signature{grid-template-columns:1fr}}
-  @media print{body{background:white}.page{width:100%;margin:0;box-shadow:none}}
+  .config-tip{margin-top:12px;text-align:center;font-size:11px;color:#98a1a6}
+
+  @media(max-width:700px){
+    .page{padding:34px 24px 42px;margin-top:12px}
+    h1{font-size:22px;letter-spacing:.14em}
+    .docno{display:block}
+    .docno span + span{margin-top:2px}
+    .route-row{grid-template-columns:92px 1fr}
+    .sign-grid{grid-template-columns:1fr}
+    .original-signature{grid-template-columns:1fr}
+    .sign-header{align-items:flex-start;flex-direction:column}
+    .sign-actions{justify-content:stretch;flex-direction:column-reverse}
+    .btn{width:100%}
+  }
+
+  @media print{
+    body{background:white}
+    .page{width:100%;margin:0;box-shadow:none;padding:38px 46px 44px}
+    .sign-actions,.clear-btn,.config-tip{display:none!important}
+    .sign-box{break-inside:avoid}
+    .signature-pad{height:150px}
+  }
 </style>
 </head>
 <body>
@@ -50,7 +258,10 @@
     <div class="agency">戀愛關係管理單位</div>
     <h1>家　庭　夫　妻　旅　行　公　文</h1>
     <div class="subtitle">戀愛一週年紀念旅行案</div>
-    <div class="docno"><span>文號：戀週年字第115001號</span><P></P><span>密等：全糖</span></div>
+    <div class="docno">
+      <span>文號：戀週年字第115001號</span>
+      <span>密等：全糖</span>
+    </div>
   </header>
 
   <table class="meta" aria-label="公文基本資料">
@@ -89,7 +300,73 @@
   <div class="item">二、臨時狀況：如途中出現「這裡好像可以坐一下」之情形，准予立即停留，不另案申請。</div>
   <div class="item">三、返程事項：請攜帶護照、行李及本案所產生之幸福快樂回憶，平安返國。</div>
 
-  <div class="signature">
+  <section class="sign-section" aria-labelledby="sign-title">
+    <div class="sign-header">
+      <div class="sign-title" id="sign-title">受文者回簽區</div>
+      <div class="status-badge" id="statusBadge">待回簽</div>
+    </div>
+
+    <div class="sign-box">
+      <div class="sign-grid">
+        <div class="field">
+          <label for="signerName">回簽人</label>
+          <input id="signerName" type="text" placeholder="請輸入姓名" autocomplete="name">
+        </div>
+        <div class="field">
+          <label>回簽意見</label>
+          <div class="choice-row" role="radiogroup" aria-label="回簽意見">
+            <div class="choice">
+              <input id="approve" type="radio" name="decision" value="同意出席" checked>
+              <label for="approve">✓ 同意出席</label>
+            </div>
+            <div class="choice">
+              <input id="discuss" type="radio" name="decision" value="同意出席，細節再議">
+              <label for="discuss">♡ 同意出席，細節再議</label>
+            </div>
+            <div class="choice">
+              <input id="reschedule" type="radio" name="decision" value="需要另行協議">
+              <label for="reschedule">↺ 需要另行協議</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sign-grid" style="margin-top:16px">
+        <div class="field">
+          <label for="signDate">回簽日期</label>
+          <input id="signDate" type="date">
+        </div>
+        <div class="field">
+          <label for="signNote">補充備註（選填）</label>
+          <textarea id="signNote" placeholder="例如：准予辦理、請老婆負責行程中的甜點採購……"></textarea>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <div class="canvas-label">
+          <span>電子簽名</span>
+          <button class="clear-btn" type="button" id="clearSignature">清除重簽</button>
+        </div>
+        <canvas class="signature-pad" id="signaturePad" aria-label="電子簽名板"></canvas>
+        <div class="canvas-hint">可用滑鼠、觸控筆或手機手指直接簽名。</div>
+      </div>
+
+      <label class="confirm-row">
+        <input id="confirmBox" type="checkbox">
+        <span>本人已閱覽本公文內容，並以以上選項及電子簽名完成回簽。</span>
+      </label>
+
+      <div class="sign-actions">
+        <button class="btn" type="button" id="resetForm">重新填寫</button>
+        <button class="btn primary" type="button" id="submitSign">送出回簽</button>
+      </div>
+
+      <div class="sign-result" id="signResult" role="status" aria-live="polite"></div>
+      <div class="legal-note">本回簽區以夫妻旅行確認為目的，屬紀念性電子確認，不等同正式法律電子簽章。</div>
+    </div>
+  </section>
+
+  <div class="original-signature">
     <div class="seal">
       <b>備註：</b>本案無待辦清單可勾選，亦無績效獎懲。<br>
       若照片變多、笑聲變多，均視為正常且令人滿意之成果。<br><br>
@@ -99,6 +376,211 @@
   </div>
 
   <div class="footer"><span class="heart">♡</span> 戀愛一週年快樂</div>
+  <div class="config-tip">提示：如需讓回簽資料真正送回發文者，請在程式最下方設定 SUBMIT_ENDPOINT（可接 Google Apps Script、自己的 API 或表單服務）。</div>
 </main>
+
+<script>
+/*
+  ===== 回簽傳送設定 =====
+  1. 不設定：回簽內容會保存在受文者瀏覽器，並可在成功後下載回簽紀錄。
+  2. 設定 SUBMIT_ENDPOINT：按「送出回簽」後，會以 JSON POST 到你的網址。
+     建議接 Google Apps Script / 自己的 API。
+*/
+const SUBMIT_ENDPOINT = "";
+
+const $ = (id) => document.getElementById(id);
+const pad = $("signaturePad");
+const ctx = pad.getContext("2d");
+let drawing = false;
+let hasSignature = false;
+let lastX = 0;
+let lastY = 0;
+
+function todayISO(){
+  const d = new Date();
+  const local = new Date(d.getTime() - d.getTimezoneOffset()*60000);
+  return local.toISOString().slice(0,10);
+}
+
+$("signDate").value = todayISO();
+
+function resizeCanvas(preserve=true){
+  const old = preserve && pad.width > 0 ? pad.toDataURL("image/png") : null;
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
+  const rect = pad.getBoundingClientRect();
+  pad.width = Math.round(rect.width * ratio);
+  pad.height = Math.round(rect.height * ratio);
+  ctx.setTransform(ratio,0,0,ratio,0,0);
+  ctx.lineWidth = 2.2;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = "#27323a";
+  if(old){
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img,0,0,rect.width,rect.height);
+    };
+    img.src = old;
+  }
+}
+
+function pointFromEvent(e){
+  const rect = pad.getBoundingClientRect();
+  const p = e.touches ? e.touches[0] : e;
+  return {x:p.clientX-rect.left,y:p.clientY-rect.top};
+}
+
+function startDraw(e){
+  e.preventDefault();
+  const p = pointFromEvent(e);
+  drawing = true;
+  lastX = p.x;
+  lastY = p.y;
+  hasSignature = true;
+}
+function draw(e){
+  if(!drawing) return;
+  e.preventDefault();
+  const p = pointFromEvent(e);
+  ctx.beginPath();
+  ctx.moveTo(lastX,lastY);
+  ctx.lineTo(p.x,p.y);
+  ctx.stroke();
+  lastX=p.x; lastY=p.y;
+}
+function endDraw(){drawing=false}
+
+pad.addEventListener("mousedown", startDraw);
+pad.addEventListener("mousemove", draw);
+window.addEventListener("mouseup", endDraw);
+pad.addEventListener("touchstart", startDraw, {passive:false});
+pad.addEventListener("touchmove", draw, {passive:false});
+pad.addEventListener("touchend", endDraw, {passive:false});
+
+$("clearSignature").addEventListener("click", () => {
+  ctx.clearRect(0,0,pad.clientWidth,pad.clientHeight);
+  hasSignature = false;
+});
+
+function getDecision(){
+  return document.querySelector('input[name="decision"]:checked')?.value || "";
+}
+
+function buildPayload(){
+  return {
+    documentNo: "戀週年字第115001號",
+    signerName: $("signerName").value.trim(),
+    decision: getDecision(),
+    signDate: $("signDate").value,
+    note: $("signNote").value.trim(),
+    signatureDataUrl: pad.toDataURL("image/png"),
+    submittedAt: new Date().toISOString()
+  };
+}
+
+function showResult(message, html=false){
+  const box = $("signResult");
+  if(html) box.innerHTML = message; else box.textContent = message;
+  box.classList.add("show");
+}
+
+function markDone(payload){
+  $("statusBadge").textContent = "已完成回簽";
+  $("statusBadge").classList.add("done");
+  showResult(
+    `<div class="result-line"><b>回簽完成：</b>${escapeHtml(payload.signerName)}｜${escapeHtml(payload.decision)}</div>`+
+    `<div class="result-line"><b>回簽日期：</b>${escapeHtml(payload.signDate)}</div>`+
+    `<div class="result-line" style="margin-top:8px">回簽紀錄已建立。請保留此頁面或下載紀錄備查。</div>`,
+    true
+  );
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
+}
+
+function downloadRecord(payload){
+  const record = JSON.stringify(payload, null, 2);
+  const blob = new Blob([record], {type:"application/json;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url;
+  a.download=`戀週年字第115001號_回簽紀錄_${payload.signDate || "未填日期"}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function submit(){
+  const name = $("signerName").value.trim();
+  const date = $("signDate").value;
+  const confirm = $("confirmBox").checked;
+
+  if(!name){ alert("請先填寫回簽人姓名。"); $("signerName").focus(); return; }
+  if(!date){ alert("請先選擇回簽日期。"); $("signDate").focus(); return; }
+  if(!hasSignature){ alert("請留下電子簽名，再送出回簽。"); return; }
+  if(!confirm){ alert("請勾選已閱覽並完成回簽確認。"); return; }
+
+  const payload = buildPayload();
+  const button = $("submitSign");
+  button.disabled = true;
+  button.textContent = "送出中…";
+
+  try{
+    if(SUBMIT_ENDPOINT){
+      const res = await fetch(SUBMIT_ENDPOINT, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      });
+      if(!res.ok) throw new Error(`HTTP ${res.status}`);
+      markDone(payload);
+      localStorage.setItem("anniversary-signature", JSON.stringify(payload));
+    }else{
+      // 無後端時：仍可完成本機回簽，避免按鈕看起來像壞掉。
+      localStorage.setItem("anniversary-signature", JSON.stringify(payload));
+      markDone(payload);
+      downloadRecord(payload);
+    }
+  }catch(err){
+    console.error(err);
+    showResult("回簽資料送出失敗。請確認回傳網址設定是否正確，或先下載本機回簽紀錄。", false);
+    downloadRecord(payload);
+  }finally{
+    button.disabled = false;
+    button.textContent = "送出回簽";
+  }
+}
+
+$("submitSign").addEventListener("click", submit);
+
+$("resetForm").addEventListener("click", () => {
+  $("signerName").value = "";
+  $("signDate").value = todayISO();
+  $("signNote").value = "";
+  $("approve").checked = true;
+  $("confirmBox").checked = false;
+  $("statusBadge").textContent = "待回簽";
+  $("statusBadge").classList.remove("done");
+  $("signResult").classList.remove("show");
+  ctx.clearRect(0,0,pad.clientWidth,pad.clientHeight);
+  hasSignature = false;
+});
+
+window.addEventListener("resize", () => resizeCanvas(true));
+resizeCanvas(false);
+
+// 重新開啟頁面時，若已有本機回簽紀錄，可提示並還原。
+try{
+  const saved = JSON.parse(localStorage.getItem("anniversary-signature") || "null");
+  if(saved?.signerName){
+    $("signerName").value = saved.signerName;
+    $("signDate").value = saved.signDate || todayISO();
+    $("signNote").value = saved.note || "";
+    document.querySelectorAll('input[name="decision"]').forEach(r => r.checked = r.value === saved.decision);
+  }
+}catch(e){/* ignore invalid local storage */}
+</script>
 </body>
 </html>
