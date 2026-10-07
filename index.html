@@ -376,17 +376,33 @@
   </div>
 
   <div class="footer"><span class="heart">♡</span> 戀愛一週年快樂</div>
-  <div class="config-tip">提示：如需讓回簽資料真正送回發文者，請在程式最下方設定 SUBMIT_ENDPOINT（可接 Google Apps Script、自己的 API 或表單服務）。</div>
+  <div class="config-tip" id="configTip">首次設定只需要把程式中的 RECEIVER_EMAIL 改成老婆的 Email；之後老公按「送出回簽」，資料會直接寄回該信箱。</div>
+
+  <!-- 實際送件用的隱藏表單：不會改變畫面，也不需要另外建立後端。 -->
+  <form id="mailForm" action="https://formsubmit.co/REPLACE_WITH_YOUR_EMAIL" method="POST" enctype="multipart/form-data" target="mailFrame" style="display:none">
+    <input type="hidden" name="_subject" value="💌【戀週年字第115001號】東京一週年旅行－受文者回簽">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_honey" value="">
+    <input type="hidden" name="_url" value="">
+    <input type="hidden" name="文件文號" value="戀週年字第115001號">
+    <input type="hidden" name="回簽人" id="mailSignerName">
+    <input type="hidden" name="回簽結果" id="mailDecision">
+    <input type="hidden" name="回簽日期" id="mailSignDate">
+    <input type="hidden" name="回簽時間" id="mailSubmittedAt">
+    <textarea name="補充備註" id="mailSignNote"></textarea>
+    <input type="file" name="電子簽名" id="mailSignatureFile" accept="image/png">
+  </form>
+  <iframe name="mailFrame" id="mailFrame" title="回簽傳送結果" style="display:none"></iframe>
 </main>
 
 <script>
 /*
-  ===== 回簽傳送設定 =====
-  1. 不設定：回簽內容會保存在受文者瀏覽器，並可在成功後下載回簽紀錄。
-  2. 設定 SUBMIT_ENDPOINT：按「送出回簽」後，會以 JSON POST 到你的網址。
-     建議接 Google Apps Script / 自己的 API。
+  ===== 你只需要修改這一行 =====
+  把下面的 Email 改成「老婆要收到回簽」的信箱。
+  第一次送出時，FormSubmit 會寄一封驗證信到這個信箱；點一次驗證連結後即可正式收件。
 */
-const SUBMIT_ENDPOINT = "";
+const RECEIVER_EMAIL = "YOUR_EMAIL@example.com";
 
 const $ = (id) => document.getElementById(id);
 const pad = $("signaturePad");
@@ -395,6 +411,7 @@ let drawing = false;
 let hasSignature = false;
 let lastX = 0;
 let lastY = 0;
+let sendStarted = false;
 
 function todayISO(){
   const d = new Date();
@@ -417,9 +434,7 @@ function resizeCanvas(preserve=true){
   ctx.strokeStyle = "#27323a";
   if(old){
     const img = new Image();
-    img.onload = () => {
-      ctx.drawImage(img,0,0,rect.width,rect.height);
-    };
+    img.onload = () => ctx.drawImage(img,0,0,rect.width,rect.height);
     img.src = old;
   }
 }
@@ -438,6 +453,7 @@ function startDraw(e){
   lastY = p.y;
   hasSignature = true;
 }
+
 function draw(e){
   if(!drawing) return;
   e.preventDefault();
@@ -446,9 +462,11 @@ function draw(e){
   ctx.moveTo(lastX,lastY);
   ctx.lineTo(p.x,p.y);
   ctx.stroke();
-  lastX=p.x; lastY=p.y;
+  lastX=p.x;
+  lastY=p.y;
 }
-function endDraw(){drawing=false}
+
+function endDraw(){ drawing=false; }
 
 pad.addEventListener("mousedown", startDraw);
 pad.addEventListener("mousemove", draw);
@@ -466,96 +484,102 @@ function getDecision(){
   return document.querySelector('input[name="decision"]:checked')?.value || "";
 }
 
-function buildPayload(){
-  return {
-    documentNo: "戀週年字第115001號",
-    signerName: $("signerName").value.trim(),
-    decision: getDecision(),
-    signDate: $("signDate").value,
-    note: $("signNote").value.trim(),
-    signatureDataUrl: pad.toDataURL("image/png"),
-    submittedAt: new Date().toISOString()
-  };
-}
-
-function showResult(message, html=false){
-  const box = $("signResult");
-  if(html) box.innerHTML = message; else box.textContent = message;
-  box.classList.add("show");
-}
-
-function markDone(payload){
-  $("statusBadge").textContent = "已完成回簽";
-  $("statusBadge").classList.add("done");
-  showResult(
-    `<div class="result-line"><b>回簽完成：</b>${escapeHtml(payload.signerName)}｜${escapeHtml(payload.decision)}</div>`+
-    `<div class="result-line"><b>回簽日期：</b>${escapeHtml(payload.signDate)}</div>`+
-    `<div class="result-line" style="margin-top:8px">回簽紀錄已建立。請保留此頁面或下載紀錄備查。</div>`,
-    true
-  );
-}
-
 function escapeHtml(str){
   return String(str).replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
 }
 
-function downloadRecord(payload){
-  const record = JSON.stringify(payload, null, 2);
-  const blob = new Blob([record], {type:"application/json;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href=url;
-  a.download=`戀週年字第115001號_回簽紀錄_${payload.signDate || "未填日期"}.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+function markDone(payload){
+  $("statusBadge").textContent = "已送回老婆";
+  $("statusBadge").classList.add("done");
+  showResult(
+    `<div class="result-line"><b>回簽完成：</b>${escapeHtml(payload.signerName)}｜${escapeHtml(payload.decision)}</div>` +
+    `<div class="result-line"><b>回簽日期：</b>${escapeHtml(payload.signDate)}</div>` +
+    `<div class="result-line" style="margin-top:8px">✅ 回簽資料已送出，包含電子簽名圖片。</div>`,
+    true
+  );
 }
 
-async function submit(){
+function showResult(message, html=false){
+  const box = $("signResult");
+  if(html) box.innerHTML = message;
+  else box.textContent = message;
+  box.classList.add("show");
+}
+
+function validate(){
   const name = $("signerName").value.trim();
   const date = $("signDate").value;
   const confirm = $("confirmBox").checked;
+  if(!name){ alert("請先填寫回簽人姓名。"); $("signerName").focus(); return false; }
+  if(!date){ alert("請先選擇回簽日期。"); $("signDate").focus(); return false; }
+  if(!hasSignature){ alert("請留下電子簽名，再送出回簽。"); return false; }
+  if(!confirm){ alert("請勾選已閱覽並完成回簽確認。"); return false; }
+  if(RECEIVER_EMAIL === "YOUR_EMAIL@example.com" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(RECEIVER_EMAIL)){
+    alert("還差最後一步：請先在 HTML 程式最上方把 RECEIVER_EMAIL 改成老婆要收到回簽的 Email。\n\n例如：const RECEIVER_EMAIL = \"abc@gmail.com\";");
+    return false;
+  }
+  return true;
+}
 
-  if(!name){ alert("請先填寫回簽人姓名。"); $("signerName").focus(); return; }
-  if(!date){ alert("請先選擇回簽日期。"); $("signDate").focus(); return; }
-  if(!hasSignature){ alert("請留下電子簽名，再送出回簽。"); return; }
-  if(!confirm){ alert("請勾選已閱覽並完成回簽確認。"); return; }
+async function attachSignatureFile(){
+  const blob = await new Promise(resolve => pad.toBlob(resolve, "image/png", 0.95));
+  if(!blob) throw new Error("無法建立簽名圖片");
+  const file = new File([blob], `戀週年字第115001號_電子簽名_${todayISO()}.png`, {type:"image/png"});
+  const transfer = new DataTransfer();
+  transfer.items.add(file);
+  $("mailSignatureFile").files = transfer.files;
+}
 
-  const payload = buildPayload();
+async function submit(){
+  if(sendStarted || !validate()) return;
+
+  sendStarted = true;
   const button = $("submitSign");
   button.disabled = true;
-  button.textContent = "送出中…";
+  button.textContent = "傳送中…";
+
+  const payload = {
+    signerName: $("signerName").value.trim(),
+    decision: getDecision(),
+    signDate: $("signDate").value,
+    note: $("signNote").value.trim(),
+    submittedAt: new Date().toLocaleString("zh-TW", {hour12:false})
+  };
 
   try{
-    if(SUBMIT_ENDPOINT){
-      const res = await fetch(SUBMIT_ENDPOINT, {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(payload)
-      });
-      if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const form = $("mailForm");
+    form.action = `https://formsubmit.co/${encodeURIComponent(RECEIVER_EMAIL)}`;
+    $("mailSignerName").value = payload.signerName;
+    $("mailDecision").value = payload.decision;
+    $("mailSignDate").value = payload.signDate;
+    $("mailSubmittedAt").value = payload.submittedAt;
+    $("mailSignNote").value = payload.note;
+    $("mailSignNote").style.display = "none";
+    $("mailFrame").name = "mailFrame";
+    await attachSignatureFile();
+
+    // 直接 POST 到 FormSubmit；結果載入到隱藏 iframe，不離開這份公文。
+    form.requestSubmit();
+
+    // FormSubmit 會將回應載入 hidden iframe。這裡給網路一點處理時間後更新畫面。
+    window.setTimeout(() => {
       markDone(payload);
       localStorage.setItem("anniversary-signature", JSON.stringify(payload));
-    }else{
-      // 無後端時：仍可完成本機回簽，避免按鈕看起來像壞掉。
-      localStorage.setItem("anniversary-signature", JSON.stringify(payload));
-      markDone(payload);
-      downloadRecord(payload);
-    }
+      button.textContent = "已送出回簽";
+    }, 1200);
   }catch(err){
     console.error(err);
-    showResult("回簽資料送出失敗。請確認回傳網址設定是否正確，或先下載本機回簽紀錄。", false);
-    downloadRecord(payload);
-  }finally{
+    sendStarted = false;
     button.disabled = false;
     button.textContent = "送出回簽";
+    alert("回簽送出失敗，請確認網路連線後再試一次。\n\n若你剛設定這個 Email，請確認是否已完成 FormSubmit 的首次 Email 驗證。");
   }
 }
 
 $("submitSign").addEventListener("click", submit);
 
 $("resetForm").addEventListener("click", () => {
+  sendStarted = false;
   $("signerName").value = "";
   $("signDate").value = todayISO();
   $("signNote").value = "";
@@ -564,14 +588,20 @@ $("resetForm").addEventListener("click", () => {
   $("statusBadge").textContent = "待回簽";
   $("statusBadge").classList.remove("done");
   $("signResult").classList.remove("show");
+  $("submitSign").disabled = false;
+  $("submitSign").textContent = "送出回簽";
   ctx.clearRect(0,0,pad.clientWidth,pad.clientHeight);
   hasSignature = false;
 });
 
+// 第一次設定時提醒「只需要改一行」。設定好後，提示自動隱藏。
+if(RECEIVER_EMAIL !== "YOUR_EMAIL@example.com" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(RECEIVER_EMAIL)){
+  $("configTip").style.display = "none";
+}
+
 window.addEventListener("resize", () => resizeCanvas(true));
 resizeCanvas(false);
 
-// 重新開啟頁面時，若已有本機回簽紀錄，可提示並還原。
 try{
   const saved = JSON.parse(localStorage.getItem("anniversary-signature") || "null");
   if(saved?.signerName){
@@ -580,7 +610,7 @@ try{
     $("signNote").value = saved.note || "";
     document.querySelectorAll('input[name="decision"]').forEach(r => r.checked = r.value === saved.decision);
   }
-}catch(e){/* ignore invalid local storage */}
+}catch(e){ /* ignore invalid local storage */ }
 </script>
 </body>
 </html>
